@@ -84,8 +84,7 @@ git_unpushed_unpulled() {
 }
 
 pecho() {
-  if [ -n "$TMUX" ]
-  then
+  if [ -n "$TMUX" ]; then
     echo -ne "\ePtmux;\e$*\e\\"
   else
     echo -ne $*
@@ -138,7 +137,8 @@ function _displayDefault() {
 
   # CURRENT_DIR
   # -----------
-  setKey 1 "👉 ${PWD##*/}" "pwd"
+  #setKey 1 "👉 ${PWD##*/}" "pwd"
+  setKey 1 "👉 $(echo $PWD | awk -F/ '{print $(NF-1)"/"$(NF)}')" "pwd"
 
   # GIT
   # ---
