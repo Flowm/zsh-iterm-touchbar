@@ -11,7 +11,7 @@ YARN_ENABLED=true
 
 # https://unix.stackexchange.com/a/22215
 find-up () {
-  path=$(pwd)
+  path=$PWD
   while [[ "$path" != "" && ! -e "$path/$1" ]]; do
     path=${path%/*}
   done
@@ -111,10 +111,10 @@ function _unbindTouchbar() {
 }
 
 function setKey(){
-  key=$1
-  label=$2
-  action=$3
-  silent=$4
+  local key=$1
+  local label=$2
+  local action=$3
+  local silent=$4
 
   pecho "\033]1337;SetKeyLabel=F${key}=${label}\a"
   if [ "$silent" != "-q" ]; then
@@ -125,7 +125,7 @@ function setKey(){
 }
 
 function clearKey(){
-  key=$1
+  local key=$1
   pecho "\033]1337;SetKeyLabel=F${key}=F${key}\a"
 }
 
@@ -134,7 +134,6 @@ function _displayDefault() {
     _clearTouchbar
   fi
   _unbindTouchbar
-
   touchBarState=""
 
   # CURRENT_DIR
@@ -172,13 +171,13 @@ function _displayDefault() {
   # PACKAGE.JSON
   # ------------
   if [[ $(find-up package.json) != "" ]]; then
-      if [[ $(find-up yarn.lock) != "" ]] && [[ "$YARN_ENABLED" = true ]]; then
+      if [[ "$YARN_ENABLED" = true ]] && [[ $(find-up yarn.lock) != "" ]]; then
           setKey 4 "🐱 yarn-run" _displayYarnScripts '-q'
       else
           setKey 4 "⚡️ npm-run" _displayNpmScripts '-q'
     fi
-  elif [[ -e Makefile ]]; then
-      setKey 4 "🐱 make" "make"
+  elif [[ $(find-up Makefile) != "" ]]; then
+      setKey 4 "🐱 make" "make -C $(find-up Makefile)"
   else
       clearKey 4
   fi
