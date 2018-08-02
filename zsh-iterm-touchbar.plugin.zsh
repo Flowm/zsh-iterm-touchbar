@@ -124,6 +124,11 @@ function setKey(){
   fi
 }
 
+function clearKey(){
+  key=$1
+  pecho "\033]1337;SetKeyLabel=F${key}=F${key}\a"
+}
+
 function _displayDefault() {
   if [[ $touchBarState != "" ]]; then
     _clearTouchbar
@@ -138,14 +143,11 @@ function _displayDefault() {
 
   # GIT
   # ---
-  # Check if the current directory is in a Git repository.
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  # Check if the current directory is in .git before running git checks.
-  if [[ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]]; then
+  # Check if the current directory is a git repository and not the .git directory
+  if git rev-parse --is-inside-work-tree &>/dev/null && [[ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]]; then
 
     # Ensure the index is up to date.
-    git update-index --really-refresh -q &>/dev/null
+    #git update-index --really-refresh -q &>/dev/null
 
     # String of indicators
     local indicators=''
@@ -162,6 +164,9 @@ function _displayDefault() {
     setKey 3 $touchbarIndicators "git status"
     #setKey 4 "🔼 push" "git push origin $(git_current_branch)"
     #setKey 5 "🔽 pull" "git pull origin $(git_current_branch)"
+  else
+      clearKey 2
+      clearKey 3
   fi
 
   # PACKAGE.JSON
@@ -172,12 +177,10 @@ function _displayDefault() {
       else
           setKey 4 "⚡️ npm-run" _displayNpmScripts '-q'
     fi
-  fi
-
-  # Makefile
-  # ------------
-  if [[ -e Makefile ]]; then
+  elif [[ -e Makefile ]]; then
       setKey 4 "🐱 make" "make"
+  else
+      clearKey 4
   fi
 }
 
