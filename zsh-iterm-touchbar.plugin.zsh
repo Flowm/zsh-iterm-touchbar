@@ -111,11 +111,16 @@ function _unbindTouchbar() {
 }
 
 function setKey(){
-  pecho "\033]1337;SetKeyLabel=F${1}=${2}\a"
-  if [ "$4" != "-q" ]; then
-    bindkey -s $fnKeys[$1] "$3 \n"
+  key=$1
+  label=$2
+  action=$3
+  silent=$4
+
+  pecho "\033]1337;SetKeyLabel=F${key}=${label}\a"
+  if [ "$silent" != "-q" ]; then
+    bindkey -s $fnKeys[$key] "$action \n"
   else
-    bindkey $fnKeys[$1] $3
+    bindkey $fnKeys[$key] $action
   fi
 }
 
