@@ -125,10 +125,12 @@ function setKey(){
 }
 
 function _displayDefault() {
-  _clearTouchbar
+  if [[ $touchBarState != "" ]]; then
+    _clearTouchbar
+  fi
   _unbindTouchbar
 
-  touchBarState=''
+  touchBarState=""
 
   # CURRENT_DIR
   # -----------
