@@ -138,7 +138,7 @@ function _displayDefault() {
   # CURRENT_DIR
   # -----------
   #setKey 1 "👉 ${PWD##*/}" "pwd"
-  setKey 1 "👉 $(echo $PWD | awk -F/ '{print $(NF-1)"/"$(NF)}')" "pwd"
+  setKey 1 "👉 $(echo $PWD | awk -F/ '{print $(NF-1)"/"$(NF)}')" _displayPath "-q"
 
   # GIT
   # ---
@@ -245,10 +245,27 @@ function _displayBranches() {
   setKey 1 "👈 back" _displayDefault '-q'
 }
 
+function _displayPath() {
+  IFS="/" read -rA directories <<< "$PWD"
+
+  _clearTouchbar
+  _unbindTouchbar
+  touchBarState='path'
+
+  idx=1
+  for dir in "$directories[@]"; do
+    setKey $idx $dir "cd $(pwd | cut -d'/' -f-$idx)"
+    idx=$((idx + 1))
+  done
+
+  setKey 1 "👈 back" _displayDefault '-q'
+}
+
 zle -N _displayDefault
 zle -N _displayNpmScripts
 zle -N _displayYarnScripts
 zle -N _displayBranches
+zle -N _displayPath
 
 precmd_iterm_touchbar() {
   if [[ $touchBarState == 'npm' ]]; then
@@ -257,6 +274,8 @@ precmd_iterm_touchbar() {
     _displayYarnScripts
   elif [[ $touchBarState == 'github' ]]; then
     _displayBranches
+  elif [[ $touchBarState == 'path' ]]; then
+    _displayPath
   else
     _displayDefault
   fi
