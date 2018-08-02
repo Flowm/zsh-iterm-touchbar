@@ -132,8 +132,7 @@ function _displayDefault() {
 
   # CURRENT_DIR
   # -----------
-  pecho "\033]1337;SetKeyLabel=F1=👉 $(echo $(pwd) | awk -F/ '{print $(NF-1)"/"$(NF)}')\a"
-  bindkey -s '^[OP' 'pwd \n'
+  setKey 1 "👉 ${PWD##*/}" "pwd"
 
   # GIT
   # ---
