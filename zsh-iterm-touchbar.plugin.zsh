@@ -139,7 +139,7 @@ function _displayDefault() {
   if git rev-parse --is-inside-work-tree &>/dev/null && [[ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]]; then
 
     # Ensure the index is up to date.
-    git update-index --really-refresh -q &>/dev/null
+    #git update-index --really-refresh -q &>/dev/null
 
     # String of indicators
     local indicators=''
@@ -163,14 +163,16 @@ function _displayDefault() {
     clearKey 5
   fi
 
-  # PACKAGE.JSON
+  # BUILD SCRIPTS
   # ------------
   if [[ $(find-up package.json) != "" ]]; then
-      if [[ $(find-up yarn.lock) != "" ]] && [[ "$YARN_ENABLED" = true ]]; then
+      if [[ "$YARN_ENABLED" = true ]] && [[ $(find-up yarn.lock) != "" ]]; then
           setKey 6 "🐱 yarn-run" _displayYarnScripts '-q'
       else
           setKey 6 "⚡️ npm-run" _displayNpmScripts '-q'
     fi
+  elif [[ $(find-up Makefile) != "" ]]; then
+      setKey 6 "🏗️ make" "make -C $(find-up Makefile)"
   else
       clearKey 6
   fi
