@@ -129,9 +129,16 @@ function _displayDefault() {
   _unbindTouchbar
   touchBarState=""
 
+  # CURRENT_HOST
+  # -----------
+  LOCATION="🏠"
+  if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+    LOCATION="🏢"
+  fi
+
   # CURRENT_DIR
   # -----------
-  setKey 1 "👉 $(echo $PWD | awk -F/ '{print $(NF-1)"/"$(NF)}')" _displayPath '-q'
+  setKey 1 "$LOCATION $(echo $PWD | awk -F/ '{print $(NF-1)"/"$(NF)}')" _displayPath '-q'
 
   # GIT
   # ---
