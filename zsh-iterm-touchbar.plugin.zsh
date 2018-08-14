@@ -161,27 +161,27 @@ function _displayDefault() {
 
     setKey 2 "🎋 `git_current_branch`" _displayBranches '-q'
     setKey 3 $touchbarIndicators "git status"
-    setKey 4 "🔼 push" "git push origin $(git_current_branch)"
-    setKey 5 "🔽 pull" "git pull origin $(git_current_branch)"
+    #setKey 4 "🔼 push" "git push origin $(git_current_branch)"
+    #setKey 5 "🔽 pull" "git pull origin $(git_current_branch)"
   else
     clearKey 2
     clearKey 3
-    clearKey 4
-    clearKey 5
+    #clearKey 4
+    #clearKey 5
   fi
 
   # BUILD SCRIPTS
   # ------------
   if [[ $(find-up package.json) != "" ]]; then
       if [[ "$YARN_ENABLED" = true ]] && [[ $(find-up yarn.lock) != "" ]]; then
-          setKey 6 "🐱 yarn-run" _displayYarnScripts '-q'
+          setKey 4 "🐱 yarn-run" _displayYarnScripts '-q'
       else
-          setKey 6 "⚡️ npm-run" _displayNpmScripts '-q'
+          setKey 4 "⚡️ npm-run" _displayNpmScripts '-q'
     fi
   elif [[ $(find-up Makefile) != "" ]]; then
-      setKey 6 "🏗️ make" "make -C $(find-up Makefile)"
+      setKey 4 "🏗️ make" "make -C $(find-up Makefile)"
   else
-      clearKey 6
+      clearKey 4
   fi
 }
 
